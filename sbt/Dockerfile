@@ -1,4 +1,4 @@
-FROM openjdk:jre-alpine
+FROM openjdk:8u121-jre-alpine
 RUN echo "installing dependencies" && \
     apk --update add gc-dev libre2-dev clang musl-dev libc-dev build-base git && \
     apk add libunwind-dev --update-cache --repository http://nl.alpinelinux.org/alpine/edge/main
@@ -28,9 +28,3 @@ RUN echo "compiling scala-native-example to pre-load dependencies" && \
     git clone https://github.com/scala-native/scala-native.g8.git
 WORKDIR scala-native.g8
 RUN sbt compile nativeLink && rm -rf /scala-native.g8 && cd /
-
-# Set up for project build
-RUN mkdir /project
-WORKDIR /project
-ENTRYPOINT ["bash", "-c"]
-CMD ["sbt run"]

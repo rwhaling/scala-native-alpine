@@ -1,12 +1,11 @@
-Alpine/musl base images for working with Scala Native.  Versions track Scala Native releases.
+Very lean Alpine Linux base images for working with Scala Native.  Versions track Scala Native releases.
 
 Images come in two versions:
 
- `runtime` for tiny containers with the minimal shared libraries for execution, < 20 MB
+`runtime` (default) for tiny containers with the minimal shared libraries for execution, < 20 MB
 
-`sbt` (default) include SBT for build as well, and are quite a bit larger, ~ 600 MB.
+`sbt` includes SBT and other build tools as well, and are quite a bit larger, ~ 600 MB.
 
-If you don't mind large images, you can just use the `latest`, which will be the latest sbt version, and contains everything you need to run your app as well.
 
 # using the runtime image
 
@@ -15,7 +14,7 @@ Due to platform-specific compiler options, libc variants, and such, you'll need 
 ```
 docker run -it \
            -v $(pwd):/project \
-           rwhaling/scala-native-alpine:sbt-0.1.0 \
+           rwhaling/scala-native-alpine:0.1.0-sbt \
            "sbt clean nativeLink"
 ```
 
@@ -26,10 +25,10 @@ And then to actually run the app:
 
 ```
 docker run -it \
-           -v /Users/rwhaling/src/scala/dinosaur/target/scala-2.11/project-out:/project/app \
-           rwhaling/scala-native-alpine:runtime-0.1.0 \
+           -v $(pwd)/project-out:/project/app \
+           rwhaling/scala-native-alpine:0.1.0-runtime \
            /project/app
 ```
 
-# examples
-Forthcoming!
+# building the images yourself
+I would recommend using the published ones for now.  The `build.sh` script does contain the process for bootstrapping an alpine build with the shared libraries, copying them out onto a volume, and adding them back to a minimal image without the build toolchain.  You can invoke it with `./build.sh <YOUR_DOCKER_HANDLE> <BUILD_VERSION>`
