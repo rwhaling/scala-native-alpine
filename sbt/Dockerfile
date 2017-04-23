@@ -32,6 +32,5 @@ RUN sbt compile nativeLink && rm -rf /scala-native.g8 && cd /
 # Set up for project build
 RUN mkdir /project
 WORKDIR /project
-ONBUILD RUN echo "essential shared libraries copied to /build/usr/lib"
 ENTRYPOINT ["bash", "-c"]
 CMD ["sbt run"]
